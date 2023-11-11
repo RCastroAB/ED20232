@@ -56,4 +56,8 @@ O outro método é usar um desempate na comparação com rótulos. No caso quand
 
 Caso eles tenham a mesma cor, então o menor nessa comparação vai ser decidido por quem tem a menor cor. Por exemplo, se você tiver dois vértices com a cor 1 na comparação, você vai ter que olhar também os rótulos e ver que um é 2 e o outro é 4, então considerar o vértice 2 como o menor para efeitos da sua ordenação.
 
+
+### Adendo: YouSort
+
+
 Já o seu método de ordenação que você tem que desenvolver, a performance dele não é relevante contanto que ele esteja correto. Caso não tenha ideias, experimente misturar dois métodos de ordenação diferentes de acordo com tamanho do problema, ou assista um daqueles vídeos de "métodos de ordenação vizualizados" e veja se algum te interessa e implemente ele.
