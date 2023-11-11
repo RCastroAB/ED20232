@@ -32,7 +32,7 @@ Considerando que o algoritmo sempre seleciona a menor cor possível para cada v�
 
 Dessa forma, ordenando os vértices pelas suas cores, você vai ter sempre **alguma** ordenação que gera aquela coloração. 
 
-# Permutação geradora única
+## Permutação geradora única
 
 Mas para garantir que seja a "canônica" (principalmente por motivos de avaliação automática por vpl), você também tem que garantir que os vértices ordenados por cor também estarão ordenados por rótulos quando suas cores forem iguais.
 
