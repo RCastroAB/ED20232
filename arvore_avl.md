@@ -79,10 +79,113 @@ func propaga(Nó nó, int lado): //lado = +/-1
       propaga(nó.pai, +1)
 
   else if nó.FB == +/-2:
-    //REBALANCEAR
+    //veremos na seção a seguir
+    rebalanceia(nó)
 
 ```
 
 
 ### Rebalanceamento
 
+Para rebalancear a sub-árvore, a AVL tree aplica uma operação chamada de "rotação." Tomando como exemplo uma rotação simples para à esquerda, teremos uma transformação no sentido anti-horário, onde o nó que antes era o filho à direita "subirá" pra posição de seu pai, que se tornará seu filho à esquerda. Caso o nó que originalmente era o filho à direita já possua um filho á esquerda, esse filho junto com toda sua sub-árvore irá "descer" para se tornar o filho à direita do antigo pai. Segue uma imagem demonstrando essa operação. Note que ela também possui uma operação idêntica para a direita, seguindo o sentido horário.
+
+**IMAGME**
+
+
+Quando é encontrada uma sub-árvore desbalanceada (novamente, uma sub-árvore onde sua raíz tem $FB=\pm2$), teremos dois casos possíveis para cada direção. Tomando como direção de exemplo a direita, o primeiro caso é onde a sub-árvore está desbalanceada 
+para a direita ($FB=+2$), e a inserção que desbalanceou a árvore aconteceu na sub-árvore à direita **do seu filho também à direita**. Para avaliar se isso aconteceu, basta verificar se o $FB$ do filho apropriado tem o mesmo sinal do 
+nosso nó desbalanceado. No nosso exemplo, teremo que $FB=+2$ para a raíz e $FB=+1$ para o filho à direita. 
+O mesmo valería para $FB=-2$ para a raíz e $FB=-1$ para o filho à esquerda.
+
+**IMAGME**
+
+Nesse caso, para rebalancear a árvore, basta realizar uma rotação simples para a direção oposta (nesse caso, esquerda). 
+
+**IMAGME**
+
+Segue um pseudocódigo que implementa uma rotação para a esquerda. Note que também será necessário uma função para a
+rotação para a direita, mas essa é idêntica, apenas trocando as direções.
+
+```python
+// Pseudocódigo
+func rotacao_para_esquerda(Nó nó):
+  filho_direita = nó.direita
+  neto_direita_esquerda = filho_direita.esquerda
+  pai = nó.pai
+
+  nó.direita = neto_direita_esquerda
+  filho_direita.esquerda = nó
+  // checa lado onde árvore se encontra em relação ao pai
+  if nó.chave < pai.chave: //esquerda
+    pai.esquerda = filho_direita
+  else: //direita
+    pai.direita = filho_direita
+```
+
+#### Rotação dupla
+
+Já o segundo caso, teremos a situação oposta, onde (tomando como exemplo novamente desbalanceamento para a direita) 
+teremos um $FB=+2$, mas o filho apropriado tem sinal oposto ($FB=-1$), ou seja, o nó novo foi inserido na sua 
+sub-árvore à esquerda. Isso se refere ao caso descrito na imagem a seguir:
+
+**IMAGME**
+
+Nesse caso precisamos fazer duas rotações (em alguns materiais chamada de "Rotação Dupla" ou até "Rotação LR/RL").
+
+Primeiro precisamos rotacionar a sub-árvore do filho relevante, utilizando a mesma função descrita no passo anterior, na 
+direção do desbalanceamento. 
+No nosso exemplo, esse será o filho à direita que será rotacionado, dessa vez para a direita.
+
+**IMAGME**
+
+Após essa operação, a árvore se encontra a um estado equivalente ao do primeiro caso, com desbalanceamento para a direita,
+e com o filho a direita com $FB$ com o mesmo sinal que seu pai. Portanto podemos agora aplicar uma rotação para a esquerda 
+de forma idêntica ao caso 1.
+
+**IMAGME**
+
+Podemos então formular o pseudocódigo para a rotação dupla. Assim como no caso anterior, note que ela terá também uma 
+equivalente "esquerda_direita".
+
+```python
+func rotacao_direita_esquerda(Nó nó):
+  rotacao_para_direita(nó.direita)
+  rotacao_para_esquerda(nó)
+```
+
+E por fim a função que aplica o rebalanceamento total, a partir do nó encontrado na função "propaga" na seção anterior.
+
+```
+func rebalanceia(Nó nó):
+  if nó.FB == -2: //esquerda
+    if nó.esquerda.FB == -1: //esquerda-esquerda
+      rotacao_para_direita(nó)
+    else: //esquerda-direita
+      rotacao_esquerda_direita(nó)
+  else: //direita
+    if nó.direita.FB == +1: //direita-direita
+      rotacao_para_esquerda(nó)
+    else: //direita-esquerda
+      rotacao_direita_esquerda(nó)
+```
+
+### Algumas considerações
+
+Uma dúvida comum entre os alunos é sobre quantas operações de rotação são necessárias por inserção. A resposta é sempre: 
+"no máximo uma, simples ou dupla." A prova intuitiva disso é de que ao inserir um novo nó na árvore, para cada ancestral 
+desse nó, apenas uma de suas sub-árvores aumenta de tamanho, causando um possível desbalanceamento. O primeiro nó encontrado 
+pela função "propaga" terá necessariamente antes da inserção duas sub-árvores filhas com alturas $h$ e $h+1$, onde a inserção na 
+maior causará o desbalanceamento com $h$ e $h+2$.
+
+Mas dado que uma operação de rotação é feita, que corrige duas sub-árvores filhas com altura $h$ e $h+2$ para agora duas com
+altura $h+1$, temos que a altura de toda essa sub-árvore pai que contém as duas irá voltar a ter exatamente a mesma 
+altura de antes. Presumindo que a árvore toda já estava balanceada antes, isso significa que ela toda estará balanceada agora, 
+e mais rotações não serão necessárias.
+
+Outra confusão comum é sobre a aparência de uma árvore balanceada. A propriedade de balanceamento não significa que ela é uma
+árvore completa ou ótima. Quando se fala da "altura" de uma árvore, se refere ao tamanho do caminho **máximo** de um nó até as folhas e garante que entre dois filhos, eles terão no máximo diferença de $\pm1$. 
+
+Isso não leva em consideração o caminho **minimo**, que podem ser bem diferentes. A árvore que considera os caminhos mínimos é 
+chamada "Árvore Ótima" e está fora do escopo da disciplina. Para ilustrar isso, segue uma ilustração do pior caso de uma 
+árvore AVL, chamada de "Árvore de Fibonacci". Note o como mesmo com seu formato aparentemente ineficiente, ela ainda segue 
+a definição de balanceamento na primeira seção, e seu pior caso de busca ainda é $O(log{n})$.
