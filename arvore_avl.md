@@ -203,3 +203,9 @@ chamada "Árvore Ótima" e está fora do escopo da disciplina. Para ilustrar iss
 a definição de balanceamento na primeira seção, e seu pior caso de busca ainda é $O(log{n})$.
 
 ![fibonacci](imagens/avl/fibonacci.png)
+
+
+### Bibliografia
+
+
+Esse material foi quase unicamente escrito utilizando o livro "The Art of Computer Programming" do Donald Knuth, especialmente o Volume 3, seção 6.2.3.
