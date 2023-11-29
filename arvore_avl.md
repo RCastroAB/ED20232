@@ -99,12 +99,12 @@ O mesmo valería para $FB=-2$ para a raíz e $FB=-1$ para o filho à esquerda.
 
 **IMAGME**
 
-Nesse caso, para rebalancear a árvore, basta realizar uma rotação simples para a direção oposta (nesse caso, esquerda). 
+Nesse caso, para rebalancear a árvore, basta realizar uma rotação simples para a direção oposta (nesse caso, esquerda). Note que os únicos $FB$s a mudarem são os do nó rotacionado e seu filho à direita, ambos para zero, o que é não é implementado no pseudocódigo por conveniência.
 
 **IMAGME**
 
 Segue um pseudocódigo que implementa uma rotação para a esquerda. Note que também será necessário uma função para a
-rotação para a direita, mas essa é idêntica, apenas trocando as direções.
+rotação para a direita, mas essa é idêntica, apenas trocando as direções. 
 
 ```python
 // Pseudocódigo
@@ -120,6 +120,7 @@ func rotacao_para_esquerda(Nó nó):
     pai.esquerda = filho_direita
   else: //direita
     pai.direita = filho_direita
+
 ```
 
 #### Rotação dupla
@@ -140,7 +141,7 @@ No nosso exemplo, esse será o filho à direita que será rotacionado, dessa vez
 
 Após essa operação, a árvore se encontra a um estado equivalente ao do primeiro caso, com desbalanceamento para a direita,
 e com o filho a direita com $FB$ com o mesmo sinal que seu pai. Portanto podemos agora aplicar uma rotação para a esquerda 
-de forma idêntica ao caso 1.
+de forma idêntica ao caso 1. Note que o valor do FB do novo neto mais à direita vai ser $+1$ se o seu antigo filho à esqueda tinha $FB=-1$, e $-1$ caso fosse $FB=+1$. A simétrica disso é verdade no caso da rotação esquerda-direita. Exceto esses dois, todos os outros $FB$s se mantêm os mesmos.
 
 **IMAGME**
 
@@ -150,6 +151,14 @@ equivalente "esquerda_direita".
 ```python
 func rotacao_direita_esquerda(Nó nó):
   rotacao_para_direita(nó.direita)
+
+  // Atualiza os FBs que mudaram
+  if nó.direita.FB == +1:
+    nó.direita.direita.FB = 0
+  else: //as únicas opções são +1 e -1 nesse caso
+    nó.direita.direita.FB = +1
+  nó.direita.FB = +1
+
   rotacao_para_esquerda(nó)
 ```
 
@@ -181,6 +190,8 @@ Mas dado que uma operação de rotação é feita, que corrige duas sub-árvores
 altura $h+1$, temos que a altura de toda essa sub-árvore pai que contém as duas irá voltar a ter exatamente a mesma 
 altura de antes. Presumindo que a árvore toda já estava balanceada antes, isso significa que ela toda estará balanceada agora, 
 e mais rotações não serão necessárias.
+
+Note que mesmo que fosse continuada a propagação, não haveria efeito, já que ela para quando o primeiro nó é encontrado com $FB=0$, que é sempre o caso da raíz da sub-árvore rotacionada.
 
 Outra confusão comum é sobre a aparência de uma árvore balanceada. A propriedade de balanceamento não significa que ela é uma
 árvore completa ou ótima. Quando se fala da "altura" de uma árvore, se refere ao tamanho do caminho **máximo** de um nó até as folhas e garante que entre dois filhos, eles terão no máximo diferença de $\pm1$. 
