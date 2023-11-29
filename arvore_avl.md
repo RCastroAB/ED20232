@@ -202,4 +202,4 @@ chamada "Árvore Ótima" e está fora do escopo da disciplina. Para ilustrar iss
 árvore AVL, chamada de "Árvore de Fibonacci". Note o como mesmo com seu formato aparentemente ineficiente, ela ainda segue 
 a definição de balanceamento na primeira seção, e seu pior caso de busca ainda é $O(log{n})$.
 
-![fibonacci](imagens/avl/fibonacci)
+![fibonacci](imagens/avl/fibonacci.png)
