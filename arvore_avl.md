@@ -87,9 +87,9 @@ func propaga(Nó nó, int lado): //lado = +/-1
 
 ### Rebalanceamento
 
-Para rebalancear a sub-árvore, a AVL tree aplica uma operação chamada de "rotação." Tomando como exemplo uma rotação simples para à esquerda, teremos uma transformação no sentido anti-horário, onde o nó que antes era o filho à direita "subirá" pra posição de seu pai, que se tornará seu filho à esquerda. Caso o nó que originalmente era o filho à direita já possua um filho á esquerda, esse filho junto com toda sua sub-árvore irá "descer" para se tornar o filho à direita do antigo pai. Segue uma imagem demonstrando essa operação. Note que ela também possui uma operação idêntica para a direita, seguindo o sentido horário.
+Para rebalancear a sub-árvore, a AVL tree aplica uma operação chamada de "rotação." Tomando como exemplo uma rotação simples para à esquerda, teremos uma transformação no sentido anti-horário, onde o nó que antes era o filho à direita "subirá" pra posição de seu pai, que se tornará seu filho à esquerda. Caso o nó que originalmente era o filho à direita já possua um filho á esquerda, esse filho junto com toda sua sub-árvore irá "descer" para se tornar o filho à direita do antigo pai. Segue uma imagem demonstrando essa operação, rotacionando no nó B para a esquerda. Note que ela também possui uma operação idêntica para a direita, seguindo o sentido horário. Note também que a árvore sempre continua ordenada mantendo a sua propriedade de árvore de busca, com elementos menores à esquerda, e maiores à direita.
 
-**IMAGME**
+![exemplo](imagens/avl/exemplo.png)
 
 
 Quando é encontrada uma sub-árvore desbalanceada (novamente, uma sub-árvore onde sua raíz tem $FB=\pm2$), teremos dois casos possíveis para cada direção. Tomando como direção de exemplo a direita, o primeiro caso é onde a sub-árvore está desbalanceada 
@@ -97,11 +97,11 @@ para a direita ($FB=+2$), e a inserção que desbalanceou a árvore aconteceu na
 nosso nó desbalanceado. No nosso exemplo, teremo que $FB=+2$ para a raíz e $FB=+1$ para o filho à direita. 
 O mesmo valería para $FB=-2$ para a raíz e $FB=-1$ para o filho à esquerda.
 
-**IMAGME**
+![simples1](imagens/avl/simples1.png)
 
 Nesse caso, para rebalancear a árvore, basta realizar uma rotação simples para a direção oposta (nesse caso, esquerda). Note que os únicos $FB$s a mudarem são os do nó rotacionado e seu filho à direita, ambos para zero, o que é não é implementado no pseudocódigo por conveniência.
 
-**IMAGME**
+![simples2](imagens/avl/simples2.png)
 
 Segue um pseudocódigo que implementa uma rotação para a esquerda. Note que também será necessário uma função para a
 rotação para a direita, mas essa é idêntica, apenas trocando as direções. 
@@ -129,7 +129,7 @@ Já o segundo caso, teremos a situação oposta, onde (tomando como exemplo nova
 teremos um $FB=+2$, mas o filho apropriado tem sinal oposto ($FB=-1$), ou seja, o nó novo foi inserido na sua 
 sub-árvore à esquerda. Isso se refere ao caso descrito na imagem a seguir:
 
-**IMAGME**
+![dupla1](imagens/avl/dupla1.png)
 
 Nesse caso precisamos fazer duas rotações (em alguns materiais chamada de "Rotação Dupla" ou até "Rotação LR/RL").
 
@@ -137,13 +137,13 @@ Primeiro precisamos rotacionar a sub-árvore do filho relevante, utilizando a me
 direção do desbalanceamento. 
 No nosso exemplo, esse será o filho à direita que será rotacionado, dessa vez para a direita.
 
-**IMAGME**
+![dupla2](imagens/avl/dupla2.png)
 
 Após essa operação, a árvore se encontra a um estado equivalente ao do primeiro caso, com desbalanceamento para a direita,
 e com o filho a direita com $FB$ com o mesmo sinal que seu pai. Portanto podemos agora aplicar uma rotação para a esquerda 
 de forma idêntica ao caso 1. Note que o valor do FB do novo neto mais à direita vai ser $+1$ se o seu antigo filho à esqueda tinha $FB=-1$, e $-1$ caso fosse $FB=+1$. A simétrica disso é verdade no caso da rotação esquerda-direita. Exceto esses dois, todos os outros $FB$s se mantêm os mesmos.
 
-**IMAGME**
+![dupla3](imagens/avl/dupla3.png)
 
 Podemos então formular o pseudocódigo para a rotação dupla. Assim como no caso anterior, note que ela terá também uma 
 equivalente "esquerda_direita".
