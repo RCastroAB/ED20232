@@ -179,6 +179,85 @@ func rebalanceia(Nó nó):
       rotacao_direita_esquerda(nó)
 ```
 
+## Remoção (Não está pronto)
+
+Agora vamos explorar como funciona a remoção em uma árvore AVL. O primeiro passo é encontrar qual elemento remover. 
+Isso pode ser feito usando uma busca binária.
+
+```python
+# Pseudocódigo
+func busca_remove(Nó nó, int chave):
+  if nó.chave == chave:
+    remove_nó(nó)
+  if chave < nó.chave:
+    busca_remove(nó.esquerda)
+  else:
+    busca_remove(nó.direita)
+
+```
+
+A partir do ponto que encontramos o nó pra remover, temos três possibilidades. Ou ele é um nó folha, e no caso 
+nós podemos simplesmente remover ele. Ou ele é um nó interno com apenas um filho, então podemos apenas substituir ele com esse
+seu filho. Ou no terceiro caso, ele é um nó interno com dois filhos, então precisamos substituir ele com o seu sucessor imediato 
+(menor elemento maior que ele) que se encontra em sua subárvore. Após essa substituição, teremos necessariamente um dos dois primeiros casos, e podemos prosseguir.
+
+Para encontrar esse sucessor imediato, precisamos descer a àrvore recursivamente, começando do filho à direita, e 
+descendo recursivamente sempre à esquerda até não ser mais possível, chegando então ao sucessor imediato. Nesse caso,
+subsitituimos esse sucessor pelo seu nó à direita (se tiver), processedemos com a substituição do nó original da mesma forma. 
+
+```python
+# Pseudocódigo
+func substitui(Nó nó, int lado):
+  #lado é -1 se nó é filho esquerdo, +1 se for direito
+  if nó.direita == NULL:
+    # não tem filho à direita
+    substituto = nó.esquerda
+    # se também não tiver, NULL funcionará sem problemas
+  else:
+    substituto = sucessor(nó.direita)
+  if lado == -1:
+    nó.pai.esquerda = substituto
+  else:
+    nó.pai.direita = substituto
+  if substituto != NULL:
+    substituto.pai = nó.pai
+  return desbalanceado
+```
+
+E a função `sucessor` é apenas a que segue:
+
+```python
+# Pseudocódigo
+func sucessor(Nó nó):
+  if nó.esquerda != NULL:
+    return sucessor(nó.esquerda)
+  else:
+    return nó
+```
+
+Agora que substituimos o nó, precisamos consertar os fatores de balanceamento.
+
+
+```python
+# Pseudocódigo
+func propaga_reverso(Nó nó, int lado): #lado = +/-1
+  nó.FB += lado
+  if nó.FB == 0:
+    return
+  else if nó.FB == +/-1:
+    # houve mudança de altura, propaga
+    if nó.chave < nó.pai.chave: #à esquerda
+      propaga(nó.pai, -1)
+    else: #à direita
+      propaga(nó.pai, +1)
+
+  else if nó.FB == +/-2:
+    #veremos na seção a seguir
+    rebalanceia(nó)
+
+```
+
+
 ### Algumas considerações
 
 Uma dúvida comum entre os alunos é sobre quantas operações de rotação são necessárias por inserção. A resposta é sempre: 
